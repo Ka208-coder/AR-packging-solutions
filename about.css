@@ -1,3 +1,9 @@
+/* html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+} */
+
 *{
     margin: 0px;
     padding: 0px;
@@ -57,6 +63,10 @@
 
 .card-img {
   height: 100px;
+  width: auto;
+}
+.card-img1{
+   height: 100px;
   width: auto;
 }
 
@@ -128,8 +138,11 @@ list-style: none;
   margin-top: 50px;
 } 
 @media (max-width: 576px) {
+  /* html, body {
+    overflow-x: hidden;
+  } */
   .about-box{
-    width: 112%;
+    width: 114%;
   }
   .company-intro{
     margin-left: 25px;
