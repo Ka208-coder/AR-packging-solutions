@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Image</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-storage.js";
+    import { getDatabase, ref as dbRef, push, set } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA0duXOthQxFMRoSEyYRxi3CZQfJ09tC8U",
+      authDomain: "cotton-box-320.firebaseapp.com",
+      projectId: "cotton-box-320",
+      storageBucket: "cotton-box-320.appspot.com",
+      messagingSenderId: "146556828798",
+      appId: "1:146556828798:web:7599a50c14647b7b826c2f",
+      measurementId: "G-36Y0SFMXSV",
+      databaseURL: "https://cotton-box-320-default-rtdb.firebaseio.com/"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const storage = getStorage(app);
+    const database = getDatabase(app);
+
+    window.uploadImage = async function () {
+      const pinInput = document.getElementById("pin").value;
+      const category = document.getElementById("category").value;
+      const file = document.getElementById("imageUpload").files[0];
+
+      if (pinInput !== "1234") {
+        alert("Invalid PIN");
+        return;
+      }
+
+      if (!file || !category) {
+        alert("Select a category and image.");
+        return;
+      }
+
+      const storageRef = ref(storage, `images/${category}/${file.name}`);
+      await uploadBytes(storageRef, file);
+
+      const url = await getDownloadURL(storageRef);
+
+      const dbReference = dbRef(database, `images/${category}`);
+      const newEntry = push(dbReference);
+      await set(newEntry, { imageUrl: url });
+
+      alert("Image uploaded successfully!");
+    };
+  </script>
+</head>
+
+<body style="background-color: white; padding: 20px; font-family: Arial, sans-serif;">
+  <h2>Upload Image</h2>
+  <label for="pin">Enter PIN:</label>
+  <input type="password" id="pin" /><br /><br />
+
+  <label for="category">Select Category:</label>
+  <select id="category">
+    <option value="cotton">Cotton Box</option>
+    <option value="phone">Phone Box</option>
+    <option value="clothes">Clothes Box</option>
+    <option value="home">Home</option>
+  </select><br /><br />
+
+  <input type="file" accept="image/*" id="imageUpload" capture="environment" /><br /><br />
+
+  <button onclick="uploadImage()">Upload</button>
+</body>
+
+</html>
