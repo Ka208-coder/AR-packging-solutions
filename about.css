@@ -145,7 +145,7 @@ list-style: none;
     width: 100%;
   }
   .company-intro{
-    margin-left: 25px;
+    /* margin-left: 25px; */
   }
     .about-heading {
     font-size: 24px;
@@ -188,11 +188,11 @@ list-style: none;
 
   .company-intro-pic {
         margin-top: -15px;
-        margin-left: 60px;
+        margin-left: 85px;
     }
     .company-choose-pic {
         margin-top: -20px;
-        margin-left: 60px;
+        /* margin-left: 60px; */
     }
     #service-icon {
     margin: 0px 0px 20px 0px;
@@ -219,6 +219,7 @@ list-style: none;
     margin-left: 60px;
     height: 100%;
 }
+
 #para{
   margin-left: 25px;
 }
