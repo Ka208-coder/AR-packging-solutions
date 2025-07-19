@@ -8,8 +8,18 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-storage.js";
-    import { getDatabase, ref as dbRef, push, set } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+    import {
+      getStorage,
+      ref,
+      uploadBytes,
+      getDownloadURL
+    } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-storage.js";
+    import {
+      getDatabase,
+      ref as dbRef,
+      push,
+      set
+    } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyA0duXOthQxFMRoSEyYRxi3CZQfJ09tC8U",
@@ -44,7 +54,6 @@
         return showMessage("⚠️ Please select a category and choose an image.", "error");
       }
 
-      // ✅ Check file size (max 2MB = 2 * 1024 * 1024)
       if (file.size > 2 * 1024 * 1024) {
         return showMessage("❌ Image must be less than 2MB.", "error");
       }
@@ -53,15 +62,14 @@
       console.log("Uploading started:", file.name);
 
       try {
-        const storageRef = ref(storage, `images/${category}/${Date.now()}_${file.name}`);
-        const uploadSnapshot = await uploadBytes(storageRef, file);
-        console.log("Uploaded:", uploadSnapshot);
-
+        const uniqueName = `${Date.now()}_${file.name}`;
+        const storageRef = ref(storage, `images/${category}/${uniqueName}`);
+        await uploadBytes(storageRef, file);
         const url = await getDownloadURL(storageRef);
-        console.log("Download URL:", url);
 
-        const dbReference = dbRef(database, `images/${category}`);
-        const newEntry = push(dbReference);
+        // ✅ Save download URL in Realtime Database at: /images/{category}/
+        const dbPath = dbRef(database, `images/${category}`);
+        const newEntry = push(dbPath);
         await set(newEntry, { imageUrl: url });
 
         preview.src = url;
@@ -100,7 +108,6 @@
 </head>
 
 <body style="background-color: white; padding: 20px; font-family: Arial, sans-serif;">
-
   <section id="header">
     <a class="pic" href="#"><img src="img/Amir/ChatGPT Image Jul 4, 2025, 11_48_51 PM.png" class="logo" /></a>
     <div>
@@ -113,7 +120,6 @@
     </div>
   </section>
 
-  <!-- ✅ Upload Form -->
   <h2>Upload Image</h2>
   <label for="pin">Enter PIN:</label>
   <input type="password" id="pin" /><br /><br />
@@ -127,14 +133,9 @@
   </select><br /><br />
 
   <input type="file" accept="image/*" id="imageUpload" /><br /><br />
-
   <button onclick="uploadImage()">Upload</button><br /><br />
 
-  <!-- ✅ Feedback Message Box -->
   <div id="messageBox" style="display:none;"></div>
-
-  <!-- ✅ Image Preview -->
   <img id="preview" style="width: 250px; display: none; margin-top: 15px;" />
-
 </body>
 </html>
