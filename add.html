@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -34,7 +33,6 @@
       const messageBox = document.getElementById("messageBox");
       const preview = document.getElementById("preview");
 
-      // Reset messages
       messageBox.style.display = "none";
       preview.style.display = "none";
 
@@ -46,13 +44,22 @@
         return showMessage("⚠️ Please select a category and choose an image.", "error");
       }
 
+      // ✅ Check file size (max 2MB = 2 * 1024 * 1024)
+      if (file.size > 2 * 1024 * 1024) {
+        return showMessage("❌ Image must be less than 2MB.", "error");
+      }
+
       showMessage("⏳ Uploading image, please wait...", "info");
+      console.log("Uploading started:", file.name);
 
       try {
-        const storageRef = ref(storage, `images/${category}/${file.name}`);
-        await uploadBytes(storageRef, file);
+        const storageRef = ref(storage, `images/${category}/${Date.now()}_${file.name}`);
+        const uploadSnapshot = await uploadBytes(storageRef, file);
+        console.log("Uploaded:", uploadSnapshot);
 
         const url = await getDownloadURL(storageRef);
+        console.log("Download URL:", url);
+
         const dbReference = dbRef(database, `images/${category}`);
         const newEntry = push(dbReference);
         await set(newEntry, { imageUrl: url });
@@ -61,7 +68,7 @@
         preview.style.display = "block";
         showMessage("✅ Image uploaded successfully!", "success");
       } catch (error) {
-        console.error(error);
+        console.error("Upload failed:", error);
         showMessage("❌ Upload failed: " + error.message, "error");
       }
     };
@@ -94,7 +101,6 @@
 
 <body style="background-color: white; padding: 20px; font-family: Arial, sans-serif;">
 
-  <!-- ✅ Header/Navbar -->
   <section id="header">
     <a class="pic" href="#"><img src="img/Amir/ChatGPT Image Jul 4, 2025, 11_48_51 PM.png" class="logo" /></a>
     <div>
@@ -103,12 +109,7 @@
         <li><a href="add.html">Add More</a></li>
         <li><a href="#">About</a></li>
         <li><a href="contect.html">Contact</a></li>
-        <a href="#" id="close"><i class="fa fa-times"></i></a>
       </ul>
-    </div>
-    <div id="mobile">
-      <a href="#"><i class="fa fa-shopping-bag" aria-hidden="true"></i></a>
-      <i id="bar" class="fa fa-outdent"></i>
     </div>
   </section>
 
@@ -125,7 +126,7 @@
     <option value="home">Home</option>
   </select><br /><br />
 
-  <input type="file" accept="image/*" id="imageUpload" capture="environment" /><br /><br />
+  <input type="file" accept="image/*" id="imageUpload" /><br /><br />
 
   <button onclick="uploadImage()">Upload</button><br /><br />
 
@@ -136,5 +137,4 @@
   <img id="preview" style="width: 250px; display: none; margin-top: 15px;" />
 
 </body>
-
 </html>
