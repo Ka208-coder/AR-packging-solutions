@@ -2,23 +2,6 @@
 <html lang="en">
 
 <head>
-    <section id="header">
-        <a class="pic" href="#"><img src="img/Amir/ChatGPT Image Jul 4, 2025, 11_48_51 PM.png" class="logo"></a>
-        <div>
-            <ul id="navbar">
-                <li><a class="active" href="index.php">home</a></li>
-                <li><a href="add.html">add more</a></li>
-                <li><a href="">About</a></li>
-                <li><a href="contect.html">Contact</a></li>
-                <a href="#" id="close"><i class="fa fa-times"></i></a>
-            </ul>
-        </div>
-        <div id="moblie">
-            <a href=""><i class="fa fa-shopping-bag" aria-hidden="true"></i></a>
-            <i id="bar" class="fa fa-outdent"></i>
-
-        </div>
-    </section>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Add Image</title>
@@ -67,12 +50,33 @@
       const newEntry = push(dbReference);
       await set(newEntry, { imageUrl: url });
 
+      document.getElementById("preview").src = url;
       alert("Image uploaded successfully!");
     };
   </script>
 </head>
 
 <body style="background-color: white; padding: 20px; font-family: Arial, sans-serif;">
+
+  <!-- ✅ Header/Navbar -->
+  <section id="header">
+    <a class="pic" href="#"><img src="img/Amir/ChatGPT Image Jul 4, 2025, 11_48_51 PM.png" class="logo" /></a>
+    <div>
+      <ul id="navbar">
+        <li><a class="active" href="index.php">Home</a></li>
+        <li><a href="add.html">Add More</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="contect.html">Contact</a></li>
+        <a href="#" id="close"><i class="fa fa-times"></i></a>
+      </ul>
+    </div>
+    <div id="mobile">
+      <a href="#"><i class="fa fa-shopping-bag" aria-hidden="true"></i></a>
+      <i id="bar" class="fa fa-outdent"></i>
+    </div>
+  </section>
+
+  <!-- ✅ Upload Form -->
   <h2>Upload Image</h2>
   <label for="pin">Enter PIN:</label>
   <input type="password" id="pin" /><br /><br />
@@ -87,7 +91,11 @@
 
   <input type="file" accept="image/*" id="imageUpload" capture="environment" /><br /><br />
 
-  <button onclick="uploadImage()">Upload</button>
+  <button onclick="uploadImage()">Upload</button><br /><br />
+
+  <!-- ✅ Image Preview -->
+  <img id="preview" style="width: 250px; display: block;" />
+
 </body>
 
 </html>
