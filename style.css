@@ -105,6 +105,7 @@ img {
 .home__blob-img {
   width: 360px;
 }
+
 /* ===== MEDIA QUERIES=====*/
 @media screen and (max-width: 320px) {
   .home {
@@ -380,6 +381,7 @@ body {
 #Products1 .pro img {
     width: 100%;
     border-radius: 20px;
+    height: 180px;
 }
 
 #Products1 .pro .des {
